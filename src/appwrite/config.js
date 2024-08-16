@@ -94,13 +94,18 @@ export class Service {
     }
   }
 
-  async getPosts(queries = [Query.equal("status", "active")]) {
+  // TODO: implement the pagination here as the large number of posts can significantlly affect the performance of the app
+  async getPosts(queries = [Query.equal("status", "active"), Query.limit(2000)]) {
     try {
-      return await this.databases.listDocuments(
+      const posts = await this.databases.listDocuments(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
         queries
       );
+
+      console.log("posts : ", posts);
+
+      return posts;
     } catch (error) {
       console.log("config :: getPosts", error);
       return false;
